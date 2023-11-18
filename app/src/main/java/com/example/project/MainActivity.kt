@@ -7,16 +7,21 @@ import android.transition.Scene
 import android.transition.TransitionManager
 import android.util.Log
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.RadioGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Task
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -147,18 +152,65 @@ class MainActivity : AppCompatActivity() {
                         val addItemButton = findViewById<Button>(R.id.addItemButton)
                         addItemButton.setOnClickListener {
                             addItem()
-
+                            updateList()
                             //리사이클러 뷰에 추가
 
 
                             TransitionManager.go(home,Fade())
-                            updateList()
+
 
 
                         }
                     }
 
+                    val except = findViewById<CheckBox>(R.id.except)
+                    except.setOnCheckedChangeListener { buttonView, isChecked ->
+                        if(isChecked){
+                            itemList.clear()
+                            val query : Query = itemCollectionRef.whereEqualTo("status", false)
+                            val task : Task<QuerySnapshot> = query.get()
+                            task.addOnSuccessListener { querySnapshot ->
+                                val notForSale : MutableList<DocumentSnapshot> = querySnapshot.documents
+                                for(document in notForSale){
+                                    val title = document.getString("title") ?: ""
+                                    val explanation = document.getString("explanation") ?: ""
+                                    val sellingItem = document.getString("sellingItem") ?: ""
+                                    val price = document.getLong("price")?.toInt() ?: 0
+                                    val status = document.getBoolean("status") ?: false
+                                    println("${title}?${explanation}?${sellingItem}?${price}?${status}")
+                                    itemList.add(item(seller,title,explanation,sellingItem, price, status))
+                                    adapter.notifyDataSetChanged()
+                                }
+
+                            }
+                        }
+                        else{
+                            updateList()
+                        }
+                    }
+                    /*
+                    if(except.isChecked){
+                        val query : Query = itemCollectionRef.whereEqualTo("status", "false")
+                        val task : Task<QuerySnapshot> = query.get()
+                        task.addOnSuccessListener { querySnapshot ->
+                            var notForSale : MutableList<DocumentSnapshot> = querySnapshot.documents
+                            for(document in notForSale){
+                                val title = document.getString("title") ?: ""
+                                val explanation = document.getString("explanation") ?: ""
+                                val sellingItem = document.getString("sellingItem") ?: ""
+                                val price = document.getLong("price")?.toInt() ?: 0
+                                val status = document.getBoolean("status") ?: false
+                                println("${title}?${explanation}?${sellingItem}?${price}?${status}")
+                            }
+
+                        }
+
+                    }
+
+                     */
+
                 }
+
                 else {
                     Log.w("LoginActivity", "signInWithEmail", it.exception)
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
