@@ -23,6 +23,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
     }
     // (3) View에 내용 입력
     override fun onBindViewHolder(holder: adapter.ViewHolder, position: Int) {
+        holder.tv_seller.text = itemList[position].seller
         holder.tv_title.text = itemList[position].title
         holder.tv_explaination.text = itemList[position].explaination
         holder.tv_sellingItem.text = itemList[position].sellingItem
@@ -63,6 +64,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                 sellingPage.findViewById<TextView>(R.id.sellingExplaination).text = tv_explaination.text.toString()
                 sellingPage.findViewById<TextView>(R.id.sellingPrice).text = tv_price.text.toString()
                 sellingPage.findViewById<TextView>(R.id.sellingPageStatus).text = tv_status.text.toString()
+
 
             }
         }

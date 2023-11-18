@@ -26,12 +26,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var home : Scene
     private lateinit var addingItem : Scene
 
-   private val itemList = arrayListOf<item>()
+    private val itemList = arrayListOf<item>()
     private val adapter = adapter(itemList)
     private val db : FirebaseFirestore = Firebase.firestore
     private val itemCollectionRef = db.collection("items")
 
-
+    val seller = Firebase.auth.currentUser?.email.toString()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                 val price = document.getLong("price")?.toInt() ?: 0
                 val status = document.getBoolean("status") ?: false
 
-                itemList.add(item(title, explanation, sellingItem, price, status))
+                itemList.add(item(seller,title, explanation, sellingItem, price, status))
                 adapter.notifyDataSetChanged()
                 println("${title}!${explanation}!${sellingItem}!${price}!${status}")
             }
@@ -116,6 +116,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         val itemMap = hashMapOf(
+            "seller" to seller,
             "title" to title,
             "explaination" to explaination,
             "sellingItem" to sellingItem,
