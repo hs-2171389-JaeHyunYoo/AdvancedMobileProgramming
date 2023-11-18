@@ -85,7 +85,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun updateList(){
+        itemList.clear()
 
+        //파이어스토어 DB에서 데이터들을 모두 가져와 ArrayList에 추가
         itemCollectionRef.get().addOnSuccessListener { result ->
             for (document in result) {
                 val title = document.getString("title") ?: ""
@@ -95,10 +97,10 @@ class MainActivity : AppCompatActivity() {
                 val status = document.getBoolean("status") ?: false
 
                 itemList.add(item(seller,title, explanation, sellingItem, price, status))
-                adapter.notifyDataSetChanged()
+
                 println("${title}!${explanation}!${sellingItem}!${price}!${status}")
             }
-
+            adapter.notifyDataSetChanged()
         }
     }
     private fun addItem(){
@@ -148,14 +150,16 @@ class MainActivity : AppCompatActivity() {
 
                             //리사이클러 뷰에 추가
 
-                            updateList()
-                            TransitionManager.go(home,Fade())
 
+                            TransitionManager.go(home,Fade())
+                            updateList()
 
 
                         }
                     }
-                } else {
+
+                }
+                else {
                     Log.w("LoginActivity", "signInWithEmail", it.exception)
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
                 }

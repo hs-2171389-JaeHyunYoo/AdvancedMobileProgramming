@@ -1,10 +1,12 @@
 package com.example.project
 
+import android.transition.Fade
 import android.transition.Scene
 import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.ListAdapter
@@ -52,6 +54,9 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                 // 판매 페이지 Scene 생성
                 val sellingItem: Scene = Scene.getSceneForLayout(activity.findViewById(android.R.id.content), R.layout.selling_page, activity)
 
+                //
+                val home: Scene = Scene.getSceneForLayout(activity.findViewById(android.R.id.content), R.layout.list, activity)
+
                 // 판매 페이지로 전환
                 TransitionManager.go(sellingItem)
 
@@ -64,6 +69,14 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                 sellingPage.findViewById<TextView>(R.id.sellingExplaination).text = tv_explaination.text.toString()
                 sellingPage.findViewById<TextView>(R.id.sellingPrice).text = tv_price.text.toString()
                 sellingPage.findViewById<TextView>(R.id.sellingPageStatus).text = tv_status.text.toString()
+
+                val backBtn = sellingPage.findViewById<Button>(R.id.sellingPageBack)
+                backBtn.setOnClickListener {
+                    println("백 버튼 눌림")
+                    TransitionManager.go(home, Fade())
+
+                }
+
 
 
             }
