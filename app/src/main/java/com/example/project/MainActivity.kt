@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.FrameLayout
 import android.widget.RadioGroup
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -103,25 +104,21 @@ class MainActivity : AppCompatActivity() {
 
                 itemList.add(item(seller,title, explanation, sellingItem, price, status))
 
-                println("${title}!${explanation}!${sellingItem}!${price}!${status}")
+                //println("${title}!${explanation}!${sellingItem}!${price}!${status}")
             }
             adapter.notifyDataSetChanged()
         }
     }
-    private fun addItem(){
+    private fun addItem() {
         val title = findViewById<TextView>(R.id.addItemTitle).text.toString()
         val explaination = findViewById<TextView>(R.id.addItemExplaination).text.toString()
         val sellingItem = findViewById<TextView>(R.id.sellingItem).text.toString()
         val price = findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
-        var itemStatus = true
-        val sellingStatus = findViewById<RadioGroup>(R.id.sellingStatus)
-        sellingStatus.setOnCheckedChangeListener { group, checkedId ->
-            when(checkedId){
-                R.id.sellingTrue -> itemStatus = true
+        val itemStatus = findViewById<Switch>(R.id.sellOrNot).isChecked
 
-                R.id.sellingFalse -> itemStatus = false
-            }
-        }
+        //println(itemStatus)
+
+
         val itemMap = hashMapOf(
             "seller" to seller,
             "title" to title,
@@ -130,7 +127,9 @@ class MainActivity : AppCompatActivity() {
             "price" to price,
             "status" to itemStatus
         )
-        //파이어베이스에 추가
+
+
+        // 파이어베이스에 추가
         itemCollectionRef.add(itemMap)
     }
     private fun doLogin(email: String, pw:String){
@@ -162,7 +161,7 @@ class MainActivity : AppCompatActivity() {
 
                         }
                     }
-
+                    //판매 상태 (true/false) 로 필터링하는 기능
                     val except = findViewById<CheckBox>(R.id.except)
                     except.setOnCheckedChangeListener { buttonView, isChecked ->
                         if(isChecked){
@@ -188,26 +187,8 @@ class MainActivity : AppCompatActivity() {
                             updateList()
                         }
                     }
-                    /*
-                    if(except.isChecked){
-                        val query : Query = itemCollectionRef.whereEqualTo("status", "false")
-                        val task : Task<QuerySnapshot> = query.get()
-                        task.addOnSuccessListener { querySnapshot ->
-                            var notForSale : MutableList<DocumentSnapshot> = querySnapshot.documents
-                            for(document in notForSale){
-                                val title = document.getString("title") ?: ""
-                                val explanation = document.getString("explanation") ?: ""
-                                val sellingItem = document.getString("sellingItem") ?: ""
-                                val price = document.getLong("price")?.toInt() ?: 0
-                                val status = document.getBoolean("status") ?: false
-                                println("${title}?${explanation}?${sellingItem}?${price}?${status}")
-                            }
 
-                        }
-
-                    }
-
-                     */
+                    //특정 가격 이하인 판매글만 필터링하는 기능
 
                 }
 
