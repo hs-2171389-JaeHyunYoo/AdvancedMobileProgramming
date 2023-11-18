@@ -65,29 +65,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sellingItem" />
 
-    <RadioGroup
-        android:id="@+id/sellingStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:checkedButton="@id/sellingTrue"
-        app:layout_constraintTop_toBottomOf="@+id/itemPrice"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="24dp">
-
-        <RadioButton
-            android:id="@+id/sellingTrue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="true" />
-
-        <RadioButton
-            android:id="@+id/sellingFalse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="false" />
-    </RadioGroup>
-
     <Button
         android:id="@+id/addItemButton"
         android:layout_width="wrap_content"
@@ -109,6 +86,6 @@
         android:minHeight="48dp"
         android:text="sellingStatus"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sellingStatus" />
+        app:layout_constraintTop_toBottomOf="@+id/itemPrice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
