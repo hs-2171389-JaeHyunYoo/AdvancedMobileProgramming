@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,20 +26,16 @@ class MainActivity : AppCompatActivity() {
     private lateinit var home : Scene
     private lateinit var addingItem : Scene
 
-    val itemList = arrayListOf<item>()
-    val adapter = adapter(itemList)
-
-
-
+   private val itemList = arrayListOf<item>()
+    private val adapter = adapter(itemList)
+    private val db : FirebaseFirestore = Firebase.firestore
+    private val itemCollectionRef = db.collection("items")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        val db : FirebaseFirestore = Firebase.firestore
-        val itemCollectionRef = db.collection("items")
 
         val sceneRoot = findViewById<FrameLayout>(R.id.scene_root)
         signUp = Scene.getSceneForLayout(sceneRoot, R.layout.signup, this)
@@ -47,6 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         val signup = findViewById<Button>(R.id.signup)
         val signin = findViewById<Button>(R.id.signin)
+
 
         //회원가입
         signup.setOnClickListener {
@@ -60,15 +58,7 @@ class MainActivity : AppCompatActivity() {
             Firebase.auth.createUserWithEmailAndPassword(email, pw)
                 .addOnCompleteListener(this) { // it: Task<AuthResult!>
                     if (it.isSuccessful) {
-                        Firebase.auth.signInWithEmailAndPassword(email,pw)
-                            .addOnCompleteListener(this) { // it: Task<AuthResult!>
-                                if (it.isSuccessful) {
-                                    TransitionManager.go(home,Fade())
-                                } else {
-                                    Log.w("LoginActivity", "signInWithEmail", it.exception)
-                                    Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                                }
-                            }
+                        doLogin(email,pw)
                     } else {
                         Log.w("LoginActivity", "signInWithEmail", it.exception)
                         Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
@@ -85,72 +75,90 @@ class MainActivity : AppCompatActivity() {
             Firebase.auth.signInWithEmailAndPassword(email, pw)
                 .addOnCompleteListener(this) { // it: Task<AuthResult!>
                     if (it.isSuccessful) { //성공
-
-                        TransitionManager.go(home,Fade());
-                        val showItems = findViewById<RecyclerView>(R.id.showItems)
-                        showItems.layoutManager = LinearLayoutManager(this)
-                        showItems.adapter = adapter
-
-                        itemCollectionRef.get().addOnSuccessListener { result ->
-                            for (document in result) {
-                                val title = document.getString("title") ?: ""
-                                val explanation = document.getString("explanation") ?: ""
-                                val sellingItem = document.getString("sellingItem") ?: ""
-                                val price = document.getLong("price")?.toInt() ?: 0
-                                val status = document.getBoolean("status") ?: false
-
-                                itemList.add(item(title,explanation,sellingItem, price, status))
-
-                                adapter.notifyDataSetChanged()
-
-                                println("${title}!${explanation}!${sellingItem}!${price}!${status}")
-                            }
-                        }
-
-                        val addItem = findViewById<Button>(R.id.addItem)
-                        addItem.setOnClickListener {
-                            TransitionManager.go(addingItem, Fade())
-
-                            val addItemButton = findViewById<Button>(R.id.addItemButton)
-                            addItemButton.setOnClickListener {
-                                val title = findViewById<TextView>(R.id.addItemTitle).text.toString()
-                                val explaination = findViewById<TextView>(R.id.addItemExplaination).text.toString()
-                                val sellingItem = findViewById<TextView>(R.id.sellingItem).text.toString()
-                                val price = findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
-                                var itemStatus = true
-                                val sellingStatus = findViewById<RadioGroup>(R.id.sellingStatus)
-                                sellingStatus.setOnCheckedChangeListener { group, checkedId ->
-                                    when(checkedId){
-                                        R.id.sellingTrue -> itemStatus = true
-
-                                        R.id.sellingFalse -> itemStatus = false
-                                    }
-                                }
-                                val itemMap = hashMapOf(
-                                    "title" to title,
-                                    "explaination" to explaination,
-                                    "sellingItem" to sellingItem,
-                                    "price" to price,
-                                    "status" to itemStatus
-                                )
-                                //파이어베이스에 추가
-                                itemCollectionRef.add(itemMap)
-
-                                //리사이클러 뷰에 추가
-                                itemList.add(item(title,explaination,sellingItem, price, itemStatus))
-                                adapter.notifyDataSetChanged()
-
-                                TransitionManager.go(home, Fade())
-
-                            }
-                        }
-
+                        doLogin(email,pw)
                     }
+
                     else {
                         println("로그인 실패")
                     }
                 }
         }
+    }
+    private fun updateList(){
+
+        itemCollectionRef.get().addOnSuccessListener { result ->
+            for (document in result) {
+                val title = document.getString("title") ?: ""
+                val explanation = document.getString("explanation") ?: ""
+                val sellingItem = document.getString("sellingItem") ?: ""
+                val price = document.getLong("price")?.toInt() ?: 0
+                val status = document.getBoolean("status") ?: false
+
+                itemList.add(item(title, explanation, sellingItem, price, status))
+                adapter.notifyDataSetChanged()
+                println("${title}!${explanation}!${sellingItem}!${price}!${status}")
+            }
+
+        }
+    }
+    private fun addItem(){
+        val title = findViewById<TextView>(R.id.addItemTitle).text.toString()
+        val explaination = findViewById<TextView>(R.id.addItemExplaination).text.toString()
+        val sellingItem = findViewById<TextView>(R.id.sellingItem).text.toString()
+        val price = findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
+        var itemStatus = true
+        val sellingStatus = findViewById<RadioGroup>(R.id.sellingStatus)
+        sellingStatus.setOnCheckedChangeListener { group, checkedId ->
+            when(checkedId){
+                R.id.sellingTrue -> itemStatus = true
+
+                R.id.sellingFalse -> itemStatus = false
+            }
+        }
+        val itemMap = hashMapOf(
+            "title" to title,
+            "explaination" to explaination,
+            "sellingItem" to sellingItem,
+            "price" to price,
+            "status" to itemStatus
+        )
+        //파이어베이스에 추가
+        itemCollectionRef.add(itemMap)
+    }
+    private fun doLogin(email: String, pw:String){
+        Firebase.auth.signInWithEmailAndPassword(email,pw)
+            .addOnCompleteListener(this) { // it: Task<AuthResult!>
+                if (it.isSuccessful) {
+                    TransitionManager.go(home,Fade());
+                    val showItems = findViewById<RecyclerView>(R.id.showItems)
+                    showItems.layoutManager = LinearLayoutManager(this)
+                    showItems.adapter = adapter
+
+                    //데이터 recyclerview에 업데이트
+                    updateList()
+
+                    val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+                    fab.setOnClickListener {
+                        TransitionManager.go(addingItem, Fade())
+
+                        val addItemButton = findViewById<Button>(R.id.addItemButton)
+                        addItemButton.setOnClickListener {
+                            addItem()
+
+                            //리사이클러 뷰에 추가
+
+                            updateList()
+                            TransitionManager.go(home,Fade())
+
+
+
+                        }
+                    }
+                } else {
+                    Log.w("LoginActivity", "signInWithEmail", it.exception)
+                    Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                }
+            }
     }
 
 
