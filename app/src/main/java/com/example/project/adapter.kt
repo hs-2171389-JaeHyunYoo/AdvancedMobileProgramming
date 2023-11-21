@@ -25,6 +25,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
     // (3) View에 내용 입력
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tv_seller.text = itemList[position].seller
+        println("seller : ${holder.tv_seller.text}")
         holder.tv_title.text = itemList[position].title
         holder.tv_explaination.text = itemList[position].explaination
         holder.tv_sellingItem.text = itemList[position].sellingItem

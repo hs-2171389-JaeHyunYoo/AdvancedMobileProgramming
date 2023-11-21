@@ -38,12 +38,15 @@ class MainActivity : AppCompatActivity() {
     private val db : FirebaseFirestore = Firebase.firestore
     private val itemCollectionRef = db.collection("items")
 
-    val seller = Firebase.auth.currentUser?.email.toString()
+    private var logInWith : String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sceneRoot = findViewById(R.id.scene_root)
         signUp = Scene.getSceneForLayout(sceneRoot, R.layout.signup, this)
+
+        //현재 로그인 한 계정
 
 
         val signup = findViewById<Button>(R.id.signup)
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             except.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     itemList.clear()
-                    val query: Query = itemCollectionRef.whereEqualTo("status", false)
+                    val query: Query = itemCollectionRef.whereEqualTo("status", true)
                     val task: Task<QuerySnapshot> = query.get()
                     task.addOnSuccessListener { querySnapshot ->
                         val notForSale: MutableList<DocumentSnapshot> = querySnapshot.documents
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity() {
                             //println ("${title}?${explanation}?${sellingItem}?${price}?${status}")
                             itemList.add(
                                 item(
-                                    seller,
+                                    logInWith,
                                     title,
                                     explanation,
                                     sellingItem,
@@ -106,6 +109,11 @@ class MainActivity : AppCompatActivity() {
 
 
                 TransitionManager.go(home, Fade())
+            }
+
+            val backBtn = findViewById<Button>(R.id.adding_back)
+            backBtn.setOnClickListener {
+                TransitionManager.go(home,Fade())
             }
         }
 
@@ -140,6 +148,8 @@ class MainActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { // it: Task<AuthResult!>
                     if (it.isSuccessful) { //성공
                         doLogin(email,pw)
+                        logInWith = Firebase.auth.currentUser?.email.toString()
+                        println("####### ${logInWith}로 로그인 함 ########ㅛ")
                     }
 
                     else {
@@ -155,6 +165,7 @@ class MainActivity : AppCompatActivity() {
         //파이어스토어 DB에서 데이터들을 모두 가져와 ArrayList에 추가
         itemCollectionRef.get().addOnSuccessListener { result ->
             for (document in result) {
+                val seller = document.getString("seller")?:""
                 val title = document.getString("title") ?: ""
                 val explanation = document.getString("explanation") ?: ""
                 val sellingItem = document.getString("sellingItem") ?: ""
@@ -176,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         val itemStatus = findViewById<Switch>(R.id.sellOrNot).isChecked
 
         val itemMap = hashMapOf(
-            "seller" to seller,
+            "seller" to logInWith,
             "title" to title,
             "explaination" to explaination,
             "sellingItem" to sellingItem,
