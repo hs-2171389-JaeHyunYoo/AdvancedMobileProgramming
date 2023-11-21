@@ -9,7 +9,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.FrameLayout
-import android.widget.RadioGroup
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
@@ -27,13 +26,15 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
+lateinit var sceneRoot : FrameLayout
 class MainActivity : AppCompatActivity() {
     private lateinit var signUp : Scene
-    private lateinit var home : Scene
+
     private lateinit var addingItem : Scene
+    private lateinit var home : Scene
 
     private val itemList = arrayListOf<item>()
-    private val adapter = adapter(itemList)
+    private var adapter:adapter =adapter(itemList)
     private val db : FirebaseFirestore = Firebase.firestore
     private val itemCollectionRef = db.collection("items")
 
@@ -41,15 +42,73 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
-        val sceneRoot = findViewById<FrameLayout>(R.id.scene_root)
+        sceneRoot = findViewById(R.id.scene_root)
         signUp = Scene.getSceneForLayout(sceneRoot, R.layout.signup, this)
-        home = Scene.getSceneForLayout(sceneRoot, R.layout.list, this)
-        addingItem = Scene.getSceneForLayout(sceneRoot, R.layout.addingitem, this)
+
 
         val signup = findViewById<Button>(R.id.signup)
         val signin = findViewById<Button>(R.id.signin)
+
+        home = Scene.getSceneForLayout(sceneRoot, R.layout.list, this)
+        addingItem = Scene.getSceneForLayout(sceneRoot, R.layout.addingitem, this)
+
+
+        home.setEnterAction {
+            updateList()
+            val showItems = findViewById<RecyclerView>(R.id.showItems)
+            showItems.layoutManager = LinearLayoutManager(this)
+            showItems.adapter = adapter
+            val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+            fab.setOnClickListener {
+                TransitionManager.go(addingItem, Fade())
+            }
+            val except = findViewById<CheckBox>(R.id.except)
+            except.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    itemList.clear()
+                    val query: Query = itemCollectionRef.whereEqualTo("status", false)
+                    val task: Task<QuerySnapshot> = query.get()
+                    task.addOnSuccessListener { querySnapshot ->
+                        val notForSale: MutableList<DocumentSnapshot> = querySnapshot.documents
+                        for (document in notForSale) {
+                            val title = document.getString("title") ?: ""
+                            val explanation = document.getString("explanation") ?: ""
+                            val sellingItem = document.getString("sellingItem") ?: ""
+                            val price = document.getLong("price")?.toInt() ?: 0
+                            val status = document.getBoolean("status") ?: false
+                            //println ("${title}?${explanation}?${sellingItem}?${price}?${status}")
+                            itemList.add(
+                                item(
+                                    seller,
+                                    title,
+                                    explanation,
+                                    sellingItem,
+                                    price,
+                                    status
+                                )
+                            )
+                            adapter.notifyDataSetChanged()
+                        }
+
+                    }
+                } else {
+                    updateList()
+                }
+            }
+
+        }
+        addingItem.setEnterAction{
+            val addItemButton = findViewById<Button>(R.id.addItemButton)
+            addItemButton.setOnClickListener {
+
+                addItem()
+                //리사이클러 뷰에 추가
+
+
+                TransitionManager.go(home, Fade())
+            }
+        }
+
 
 
         //회원가입
@@ -59,7 +118,7 @@ class MainActivity : AppCompatActivity() {
             val name = findViewById<TextView>(R.id.name)
             val pw = findViewById<TextView>(R.id.password).text.toString()
             val birth = findViewById<TextView>(R.id.birth)
-            println("${email}-${name.text}-${birth.text}-${pw}")
+            //println("${email}-${name.text}-${birth.text}-${pw}")
             //회원가입 성공
             Firebase.auth.createUserWithEmailAndPassword(email, pw)
                 .addOnCompleteListener(this) { // it: Task<AuthResult!>
@@ -72,7 +131,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
         }
-
 
         //로그인
         signin.setOnClickListener {
@@ -89,6 +147,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         }
+
     }
     private fun updateList(){
         itemList.clear()
@@ -116,9 +175,6 @@ class MainActivity : AppCompatActivity() {
         val price = findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
         val itemStatus = findViewById<Switch>(R.id.sellOrNot).isChecked
 
-        //println(itemStatus)
-
-
         val itemMap = hashMapOf(
             "seller" to seller,
             "title" to title,
@@ -128,7 +184,6 @@ class MainActivity : AppCompatActivity() {
             "status" to itemStatus
         )
 
-
         // 파이어베이스에 추가
         itemCollectionRef.add(itemMap)
     }
@@ -137,61 +192,7 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { // it: Task<AuthResult!>
                 if (it.isSuccessful) {
                     TransitionManager.go(home,Fade());
-                    val showItems = findViewById<RecyclerView>(R.id.showItems)
-                    showItems.layoutManager = LinearLayoutManager(this)
-                    showItems.adapter = adapter
-
-                    //데이터 recyclerview에 업데이트
-                    updateList()
-
-                    val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-                    fab.setOnClickListener {
-                        TransitionManager.go(addingItem, Fade())
-
-                        val addItemButton = findViewById<Button>(R.id.addItemButton)
-                        addItemButton.setOnClickListener {
-                            addItem()
-                            updateList()
-                            //리사이클러 뷰에 추가
-
-
-                            TransitionManager.go(home,Fade())
-
-
-
-                        }
-                    }
-                    //판매 상태 (true/false) 로 필터링하는 기능
-                    val except = findViewById<CheckBox>(R.id.except)
-                    except.setOnCheckedChangeListener { buttonView, isChecked ->
-                        if(isChecked){
-                            itemList.clear()
-                            val query : Query = itemCollectionRef.whereEqualTo("status", false)
-                            val task : Task<QuerySnapshot> = query.get()
-                            task.addOnSuccessListener { querySnapshot ->
-                                val notForSale : MutableList<DocumentSnapshot> = querySnapshot.documents
-                                for(document in notForSale){
-                                    val title = document.getString("title") ?: ""
-                                    val explanation = document.getString("explanation") ?: ""
-                                    val sellingItem = document.getString("sellingItem") ?: ""
-                                    val price = document.getLong("price")?.toInt() ?: 0
-                                    val status = document.getBoolean("status") ?: false
-                                    println("${title}?${explanation}?${sellingItem}?${price}?${status}")
-                                    itemList.add(item(seller,title,explanation,sellingItem, price, status))
-                                    adapter.notifyDataSetChanged()
-                                }
-
-                            }
-                        }
-                        else{
-                            updateList()
-                        }
-                    }
-
-                    //특정 가격 이하인 판매글만 필터링하는 기능
-
                 }
-
                 else {
                     Log.w("LoginActivity", "signInWithEmail", it.exception)
                     Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
