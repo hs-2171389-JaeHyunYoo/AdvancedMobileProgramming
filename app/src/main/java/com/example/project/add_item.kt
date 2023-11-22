@@ -62,14 +62,6 @@ class add_item : Fragment() {
 
         }
 
-        val backBtn = view.findViewById<Button>(R.id.adding_back)
-        backBtn.setOnClickListener {
-            val moveToList = list()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment, moveToList)
-            transaction.commit()
-        }
-
         return view
     }
 }
