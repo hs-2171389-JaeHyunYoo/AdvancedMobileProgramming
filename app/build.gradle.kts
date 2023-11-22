@@ -8,6 +8,7 @@ android {
     namespace = "com.example.project"
     compileSdk = 34
 
+
     defaultConfig {
         applicationId = "com.example.project"
         minSdk = 33
@@ -34,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -49,6 +54,9 @@ dependencies {
 
     implementation(platform("com.google.firebase:firebase-bom:32.3.1"))
     implementation("com.google.firebase:firebase-firestore-ktx")
+
+    implementation ("androidx.fragment:fragment-ktx:1.5.7")
+
 
 
     testImplementation("junit:junit:4.13.2")

@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Task
@@ -28,188 +29,27 @@ import com.google.firebase.ktx.Firebase
 
 lateinit var sceneRoot : FrameLayout
 class MainActivity : AppCompatActivity() {
-    private lateinit var signUp : Scene
 
-    private lateinit var addingItem : Scene
-    private lateinit var home : Scene
+
 
     private val itemList = arrayListOf<item>()
-    private var adapter:adapter =adapter(itemList)
-    private val db : FirebaseFirestore = Firebase.firestore
+    private var adapter: adapter = adapter(itemList)
+    private val db: FirebaseFirestore = Firebase.firestore
     private val itemCollectionRef = db.collection("items")
 
-    private var logInWith : String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        sceneRoot = findViewById(R.id.scene_root)
-        signUp = Scene.getSceneForLayout(sceneRoot, R.layout.signup, this)
 
-        //현재 로그인 한 계정
-
-
-        val signup = findViewById<Button>(R.id.signup)
-        val signin = findViewById<Button>(R.id.signin)
-
-        home = Scene.getSceneForLayout(sceneRoot, R.layout.list, this)
-        addingItem = Scene.getSceneForLayout(sceneRoot, R.layout.addingitem, this)
-
-
-        home.setEnterAction {
-            updateList()
-            val showItems = findViewById<RecyclerView>(R.id.showItems)
-            showItems.layoutManager = LinearLayoutManager(this)
-            showItems.adapter = adapter
-            val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-            fab.setOnClickListener {
-                TransitionManager.go(addingItem, Fade())
+        //버튼 클릭 = 로그인 & 회원 가입 창으로 이동
+        val btn = findViewById<Button>(R.id.btn)
+        btn.setOnClickListener {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                replace(R.id.fragment, signup::class.java, null)
+                addToBackStack(null)
             }
-            val except = findViewById<CheckBox>(R.id.except)
-            except.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    itemList.clear()
-                    val query: Query = itemCollectionRef.whereEqualTo("status", true)
-                    val task: Task<QuerySnapshot> = query.get()
-                    task.addOnSuccessListener { querySnapshot ->
-                        val notForSale: MutableList<DocumentSnapshot> = querySnapshot.documents
-                        for (document in notForSale) {
-                            val title = document.getString("title") ?: ""
-                            val explanation = document.getString("explanation") ?: ""
-                            val sellingItem = document.getString("sellingItem") ?: ""
-                            val price = document.getLong("price")?.toInt() ?: 0
-                            val status = document.getBoolean("status") ?: false
-                            //println ("${title}?${explanation}?${sellingItem}?${price}?${status}")
-                            itemList.add(
-                                item(
-                                    logInWith,
-                                    title,
-                                    explanation,
-                                    sellingItem,
-                                    price,
-                                    status
-                                )
-                            )
-                            adapter.notifyDataSetChanged()
-                        }
-
-                    }
-                } else {
-                    updateList()
-                }
-            }
-
-        }
-        addingItem.setEnterAction{
-            val addItemButton = findViewById<Button>(R.id.addItemButton)
-            addItemButton.setOnClickListener {
-
-                addItem()
-                //리사이클러 뷰에 추가
-
-
-                TransitionManager.go(home, Fade())
-            }
-
-            val backBtn = findViewById<Button>(R.id.adding_back)
-            backBtn.setOnClickListener {
-                TransitionManager.go(home,Fade())
-            }
-        }
-
-
-
-        //회원가입
-        signup.setOnClickListener {
-            //회원 가입 기능
-            val email = findViewById<TextView>(R.id.email).text.toString()
-            val name = findViewById<TextView>(R.id.name)
-            val pw = findViewById<TextView>(R.id.password).text.toString()
-            val birth = findViewById<TextView>(R.id.birth)
-            //println("${email}-${name.text}-${birth.text}-${pw}")
-            //회원가입 성공
-            Firebase.auth.createUserWithEmailAndPassword(email, pw)
-                .addOnCompleteListener(this) { // it: Task<AuthResult!>
-                    if (it.isSuccessful) {
-                        doLogin(email,pw)
-                    } else {
-                        Log.w("LoginActivity", "signInWithEmail", it.exception)
-                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-        }
-
-        //로그인
-        signin.setOnClickListener {
-            val email = findViewById<TextView>(R.id.email).text.toString()
-            val pw = findViewById<TextView>(R.id.password).text.toString()
-            Firebase.auth.signInWithEmailAndPassword(email, pw)
-                .addOnCompleteListener(this) { // it: Task<AuthResult!>
-                    if (it.isSuccessful) { //성공
-                        doLogin(email,pw)
-                        logInWith = Firebase.auth.currentUser?.email.toString()
-                        println("####### ${logInWith}로 로그인 함 ########ㅛ")
-                    }
-
-                    else {
-                        println("로그인 실패")
-                    }
-                }
-        }
-
-    }
-    private fun updateList(){
-        itemList.clear()
-
-        //파이어스토어 DB에서 데이터들을 모두 가져와 ArrayList에 추가
-        itemCollectionRef.get().addOnSuccessListener { result ->
-            for (document in result) {
-                val seller = document.getString("seller")?:""
-                val title = document.getString("title") ?: ""
-                val explanation = document.getString("explanation") ?: ""
-                val sellingItem = document.getString("sellingItem") ?: ""
-                val price = document.getLong("price")?.toInt() ?: 0
-                val status = document.getBoolean("status") ?: false
-
-                itemList.add(item(seller,title, explanation, sellingItem, price, status))
-
-                //println("${title}!${explanation}!${sellingItem}!${price}!${status}")
-            }
-            adapter.notifyDataSetChanged()
         }
     }
-    private fun addItem() {
-        val title = findViewById<TextView>(R.id.addItemTitle).text.toString()
-        val explaination = findViewById<TextView>(R.id.addItemExplaination).text.toString()
-        val sellingItem = findViewById<TextView>(R.id.sellingItem).text.toString()
-        val price = findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
-        val itemStatus = findViewById<Switch>(R.id.sellOrNot).isChecked
-
-        val itemMap = hashMapOf(
-            "seller" to logInWith,
-            "title" to title,
-            "explaination" to explaination,
-            "sellingItem" to sellingItem,
-            "price" to price,
-            "status" to itemStatus
-        )
-
-        // 파이어베이스에 추가
-        itemCollectionRef.add(itemMap)
-    }
-    private fun doLogin(email: String, pw:String){
-        Firebase.auth.signInWithEmailAndPassword(email,pw)
-            .addOnCompleteListener(this) { // it: Task<AuthResult!>
-                if (it.isSuccessful) {
-                    TransitionManager.go(home,Fade());
-                }
-                else {
-                    Log.w("LoginActivity", "signInWithEmail", it.exception)
-                    Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
-                }
-            }
-    }
-
-
 }

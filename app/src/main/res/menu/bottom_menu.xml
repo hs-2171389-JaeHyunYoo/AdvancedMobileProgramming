@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/fragment_home"
+        android:title="홈"
+        android:icon="@drawable/home_pic"/>
+    <item
+        android:id="@+id/fragment_chat"
+        android:title="채팅"
+        android:icon="@drawable/chat_pic"/>
+    <item
+        android:id="@+id/fragment_info"
+        android:title="내 정보"
+        android:icon="@drawable/info_pic"/>
+</Menu>

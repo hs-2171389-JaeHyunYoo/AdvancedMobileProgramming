@@ -1,5 +1,6 @@
 package com.example.project
 
+import android.os.Bundle
 import android.transition.Fade
 import android.transition.Scene
 import android.transition.TransitionManager
@@ -25,54 +26,48 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
     // (3) View에 내용 입력
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tv_seller.text = itemList[position].seller
-        println("seller : ${holder.tv_seller.text}")
         holder.tv_title.text = itemList[position].title
         holder.tv_explaination.text = itemList[position].explaination
         holder.tv_sellingItem.text = itemList[position].sellingItem
         holder.tv_price.text = itemList[position].price.toString()
         holder.tv_status.text = itemList[position].status.toString()
-
     }
     // (4) 레이아웃 내 View 연결
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        /*
-        val name: TextView = itemView.findViewById(R.id.tv_name)
-        val number: TextView = itemView.findViewById(R.id.tv_number)
-        */
         val tv_seller : TextView = itemView.findViewById(R.id.tv_seller)
         val tv_title : TextView = itemView.findViewById(R.id.tv_title)
         val tv_explaination : TextView = itemView.findViewById(R.id.tv_explaination)
         val tv_sellingItem : TextView = itemView.findViewById(R.id.tv_sellingItem)
         val tv_price : TextView = itemView.findViewById(R.id.tv_price)
         val tv_status : TextView = itemView.findViewById(R.id.tv_status)
-        init{
+
+        init {
             itemView.setOnClickListener {
-                println(itemView)
-                val activity = itemView.context as AppCompatActivity
-                // 판매 페이지 Scene 생성
-                val sellingpage : Scene = Scene.getSceneForLayout(sceneRoot, R.layout.selling_page, activity)
-                // 판매 페이지로 전환
-                TransitionManager.go(sellingpage)
-                val home = Scene.getSceneForLayout(sceneRoot,R.layout.list,activity)
+                val context = itemView.context
+                // 전환할 프래그먼트의 인스턴스 생성
+                val sellingPage = selling_page()
 
-                val sellingPage = sellingpage.sceneRoot
+                // 전환을 위한 트랜잭션 시작
+                val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
 
+                // 프래그먼트에 전달할 데이터 Bundle 생성
+                val bundle = Bundle()
+                bundle.putString("seller", tv_seller.text.toString())
+                bundle.putString("title", tv_title.text.toString())
+                bundle.putString("explaination", tv_explaination.text.toString())
+                bundle.putString("sellingItem", tv_sellingItem.text.toString())
+                bundle.putInt("price", tv_price.text.toString().toInt())
+                bundle.putBoolean("status", tv_status.text.toString().toBoolean())
 
-                sellingPage.findViewById<TextView>(R.id.sellingSeller).text = tv_seller.text.toString()
-                sellingPage.findViewById<TextView>(R.id.sellingTitle).text = tv_title.text.toString()
-                sellingPage.findViewById<TextView>(R.id.sellingExplaination).text = tv_explaination.text.toString()
-                sellingPage.findViewById<TextView>(R.id.sellingPrice).text = tv_price.text.toString()
-                sellingPage.findViewById<TextView>(R.id.sellingPageStatus).text = tv_status.text.toString()
+                // 데이터 Bundle을 프래그먼트에 전달
+                sellingPage.arguments = bundle
 
-
-                val backBtn = activity.findViewById<Button>(R.id.sellingPageBack)
-                backBtn.setOnClickListener {
-                    println("백 버튼 눌림")
-                    TransitionManager.go(home, Fade())
-                }
-
+                // 프래그먼트 전환
+                transaction.replace(R.id.fragment, sellingPage)
+                transaction.addToBackStack(null) // 이전 상태로 돌아가기 위해 스택에 추가
+                transaction.commit()
             }
+
         }
     }
-
 }
