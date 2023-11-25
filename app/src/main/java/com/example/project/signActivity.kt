@@ -29,7 +29,7 @@ class signActivity : AppCompatActivity() {
                         startActivity(Intent(this, main_display::class.java))
                     } else {
                         Log.w("LoginActivity", "signInWithEmail", task.exception)
-                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "회원 가입 실패.", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
@@ -61,7 +61,7 @@ class signActivity : AppCompatActivity() {
                     }
                     else {
                         Log.w("LoginActivity", "signInWithEmail", task.exception)
-                        Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
         }

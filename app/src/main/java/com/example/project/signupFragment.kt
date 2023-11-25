@@ -49,7 +49,7 @@ class signupFragment : Fragment() {
 
                     } else {
                         Log.w("LoginActivity", "signInWithEmail", task.exception)
-                        Toast.makeText(requireContext(), "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "아이디/비밀번호를 확인해주세요.", Toast.LENGTH_SHORT).show()
                     }
                 }
         }
@@ -76,7 +76,7 @@ class signupFragment : Fragment() {
                     }
                     else {
                         Log.w("LoginActivity", "signInWithEmail", task.exception)
-                        Toast.makeText(requireContext(), "Authentication failed.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "회원가입 실패.", Toast.LENGTH_SHORT).show()
                     }
                 }
 
