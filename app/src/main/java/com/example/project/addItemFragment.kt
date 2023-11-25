@@ -8,14 +8,12 @@ import android.widget.Button
 import android.widget.Switch
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class add_item : Fragment() {
+class addItemFragment : Fragment() {
 
     private val itemList = arrayListOf<item>()
     private var adapter: adapter = adapter(itemList)
@@ -55,7 +53,7 @@ class add_item : Fragment() {
 
             //아이템 추가 후 자동으로 리스트로 이동
             //백 스택 쌓기 불 필요
-            val moveToList = list()
+            val moveToList = listFragment()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment, moveToList)
             transaction.commit()

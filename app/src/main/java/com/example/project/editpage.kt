@@ -1,17 +1,12 @@
 package com.example.project
 
 import android.os.Bundle
-import android.text.TextUtils.replace
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -63,7 +58,7 @@ class edit : Fragment() {
                     "status" to updatedStatus
                 )
             )
-            val listPage = list()
+            val listPage = listFragment()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment, listPage)
             transaction.commit()

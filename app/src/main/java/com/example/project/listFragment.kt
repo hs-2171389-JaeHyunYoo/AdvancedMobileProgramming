@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +20,7 @@ import com.google.firebase.ktx.Firebase
 
 
 
-class list : Fragment() {
+class listFragment : Fragment() {
 
     private val itemList = arrayListOf<item>()
     private var adapter: adapter = adapter(itemList)
@@ -119,7 +118,7 @@ class list : Fragment() {
         //백 스택 쌓기 필요함
         val itemAddBtn = view.findViewById<FloatingActionButton>(R.id.floatingActionButton)
         itemAddBtn.setOnClickListener {
-            val moveToAdd = add_item()
+            val moveToAdd = addItemFragment()
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment, moveToAdd)
             transaction.addToBackStack(null)

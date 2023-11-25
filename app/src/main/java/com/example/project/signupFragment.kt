@@ -14,12 +14,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class signup : Fragment() {
+class signupFragment : Fragment() {
 
     private val itemList = arrayListOf<item>()
     private var adapter: adapter = adapter(itemList)
     private val db: FirebaseFirestore = Firebase.firestore
     private val itemCollectionRef = db.collection("items")
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +42,7 @@ class signup : Fragment() {
                 .addOnCompleteListener(requireActivity()) { task ->
                     if (task.isSuccessful) {
 
-                        val moveToList = list()
+                        val moveToList = listFragment()
                         val transaction = requireActivity().supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.fragment, moveToList)
                         transaction.commit()
@@ -67,7 +68,7 @@ class signup : Fragment() {
                         println("log in success")
                         //판매글 목록이 보이는 list로 이동
                         //스택 쌓기 불 필요
-                        val moveToList = list()
+                        val moveToList = listFragment()
                         val transaction = requireActivity().supportFragmentManager.beginTransaction()
                         transaction.replace(R.id.fragment, moveToList)
                         transaction.commit()

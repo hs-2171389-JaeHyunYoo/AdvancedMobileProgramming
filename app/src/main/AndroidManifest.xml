@@ -13,6 +13,15 @@
         android:theme="@style/Theme.Project"
         tools:targetApi="31">
         <activity
+            android:name=".naviActivity"
+            android:exported="false" />
+        <activity
+            android:name=".main_display"
+            android:exported="false" />
+        <activity
+            android:name=".signActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
