@@ -16,7 +16,8 @@ class selling_page : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.selling_page, container, false)
 
-        val seller = arguments?.getString("seller", "")
+        val seller = arguments?.getString("seller", "no-seller")
+        println("selling_page : ${seller}")
         val title = arguments?.getString("title", "")
         val explanation = arguments?.getString("explanation", "")
         val sellingItem = arguments?.getString("sellingItem", "")
@@ -28,12 +29,16 @@ class selling_page : Fragment() {
         view.findViewById<TextView>(R.id.sellingExplaination).text = "판매 설명 : " + explanation
         view.findViewById<TextView>(R.id.sellingItemName).text = "판매 물품 : " + sellingItem
         view.findViewById<TextView>(R.id.sellingPrice).text = "판매 가격 : " + price.toString()
+
+
         if(status == true){
             view.findViewById<TextView>(R.id.sellingPageStatus).text = "판매 상태 : 판매 중"
         }
         else{
             view.findViewById<TextView>(R.id.sellingPageStatus).text = "판매 상태 : 판매 완료"
         }
+
+        println("${seller}-${title}-${explanation}-${sellingItem}-${price}-${status}#######################")
 
         return view
     }

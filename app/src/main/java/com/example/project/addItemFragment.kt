@@ -28,6 +28,7 @@ class addItemFragment : Fragment() {
         val view = inflater.inflate(R.layout.addingitem, container, false)
 
         val logInWith = Firebase.auth.currentUser?.email.toString()
+        println(logInWith)
 
         val itemAddBtn = view.findViewById<Button>(R.id.addItemButton)
         itemAddBtn.setOnClickListener {
@@ -45,6 +46,7 @@ class addItemFragment : Fragment() {
                 "price" to price,
                 "status" to itemStatus
             )
+            println("addItemFragment : ${logInWith}-${title}-${sellingItem}-${price}-${itemStatus}")
 
             // 파이어베이스에 추가
             itemCollectionRef.add(itemMap)

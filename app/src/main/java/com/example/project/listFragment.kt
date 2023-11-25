@@ -48,9 +48,9 @@ class listFragment : Fragment() {
         itemCollectionRef.get().addOnSuccessListener { result ->
             itemList.clear()
             for (document in result) {
-                val seller = document.getString("seller") ?: ""
+                val seller = document.getString("seller") ?: "no seller"
                 val title = document.getString("title") ?: ""
-                val explanation = document.getString("explanation") ?: ""
+                val explanation = document.getString("explaination") ?: ""
                 val sellingItem = document.getString("sellingItem") ?: ""
                 val price = document.getLong("price")?.toInt() ?: 0
                 val status = document.getBoolean("status") ?: false
@@ -71,15 +71,16 @@ class listFragment : Fragment() {
                 task.addOnSuccessListener { querySnapshot ->
                     val notForSale: MutableList<DocumentSnapshot> = querySnapshot.documents
                     for (document in notForSale) {
+                        val seller = document.getString("seller") ?: "no seller"
                         val title = document.getString("title") ?: ""
-                        val explanation = document.getString("explanation") ?: ""
+                        val explanation = document.getString("explaination") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""
                         val price = document.getLong("price")?.toInt() ?: 0
                         val status = document.getBoolean("status") ?: false
                         //println ("${title}?${explanation}?${sellingItem}?${price}?${status}")
                         itemList.add(
                             item(
-                                logInWith,
+                                seller,
                                 title,
                                 explanation,
                                 sellingItem,
@@ -100,7 +101,7 @@ class listFragment : Fragment() {
                     for (document in result) {
                         val seller = document.getString("seller")?:""
                         val title = document.getString("title") ?: ""
-                        val explanation = document.getString("explanation") ?: ""
+                        val explanation = document.getString("explaination") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""
                         val price = document.getLong("price")?.toInt() ?: 0
                         val status = document.getBoolean("status") ?: false
