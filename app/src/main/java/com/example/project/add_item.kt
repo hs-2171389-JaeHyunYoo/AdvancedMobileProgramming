@@ -34,7 +34,7 @@ class add_item : Fragment() {
         val itemAddBtn = view.findViewById<Button>(R.id.addItemButton)
         itemAddBtn.setOnClickListener {
             val title = view.findViewById<TextView>(R.id.addItemTitle).text.toString()
-            val explaination = view.findViewById<TextView>(R.id.addItemExplaination).text.toString()
+            val explanation = view.findViewById<TextView>(R.id.addItemExplaination).text.toString()
             val sellingItem = view.findViewById<TextView>(R.id.sellingItem).text.toString()
             val price = view.findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
             val itemStatus = view.findViewById<Switch>(R.id.sellOrNot).isChecked
@@ -42,7 +42,7 @@ class add_item : Fragment() {
             val itemMap = hashMapOf(
                 "seller" to logInWith,
                 "title" to title,
-                "explaination" to explaination,
+                "explanation" to explanation,
                 "sellingItem" to sellingItem,
                 "price" to price,
                 "status" to itemStatus

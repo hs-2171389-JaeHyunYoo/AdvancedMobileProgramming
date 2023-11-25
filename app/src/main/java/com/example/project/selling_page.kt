@@ -18,14 +18,14 @@ class selling_page : Fragment() {
 
         val seller = arguments?.getString("seller", "")
         val title = arguments?.getString("title", "")
-        val explaination = arguments?.getString("explaination", "")
+        val explanation = arguments?.getString("explanation", "")
         val sellingItem = arguments?.getString("sellingItem", "")
         val price = arguments?.getInt("price", 0)
         val status = arguments?.getBoolean("status", false)
 
         view.findViewById<TextView>(R.id.sellingSeller).text = "판매자 : " + seller
         view.findViewById<TextView>(R.id.sellingTitle).text = "글 제목 : " + title
-        view.findViewById<TextView>(R.id.sellingExplaination).text = "판매 설명 : " + explaination
+        view.findViewById<TextView>(R.id.sellingExplaination).text = "판매 설명 : " + explanation
         view.findViewById<TextView>(R.id.sellingItemName).text = "판매 물품 : " + sellingItem
         view.findViewById<TextView>(R.id.sellingPrice).text = "판매 가격 : " + price.toString()
         if(status == true){
