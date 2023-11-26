@@ -16,8 +16,7 @@ class selling_page : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.selling_page, container, false)
 
-        val seller = arguments?.getString("seller", "no-seller")
-        println("selling_page : ${seller}")
+        val seller = arguments?.getString("seller", "default-seller")
         val title = arguments?.getString("title", "")
         val explanation = arguments?.getString("explanation", "")
         val sellingItem = arguments?.getString("sellingItem", "")

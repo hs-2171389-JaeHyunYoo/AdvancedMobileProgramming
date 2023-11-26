@@ -71,7 +71,7 @@ class listFragment : Fragment() {
                 task.addOnSuccessListener { querySnapshot ->
                     val notForSale: MutableList<DocumentSnapshot> = querySnapshot.documents
                     for (document in notForSale) {
-                        val seller = document.getString("seller") ?: "no seller"
+                        val seller = document.getString("seller") ?: "filtering : no seller"
                         val title = document.getString("title") ?: ""
                         val explanation = document.getString("explaination") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""

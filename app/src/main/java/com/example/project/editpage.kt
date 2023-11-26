@@ -33,9 +33,9 @@ class edit : Fragment() {
         //YJH
         val switch = view.findViewById<Switch>(R.id.statusSwitch)
 
-        val title = arguments?.getString("title", "")
-        val explaination = arguments?.getString("explaination", "")
-        val sellingItem = arguments?.getString("sellingItem", "")
+        val title = arguments?.getString("title", "default-title")
+        val explaination = arguments?.getString("explanation", "default-explaination")
+        val sellingItem = arguments?.getString("sellingItem", "default-price")
         val price = arguments?.getInt("price", 0)
         val status = arguments?.getBoolean("status", false)
         println("${title}%%${explaination}%%${sellingItem}%%${price}%%${status}")
