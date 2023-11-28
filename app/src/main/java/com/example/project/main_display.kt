@@ -31,7 +31,7 @@ class main_display : AppCompatActivity() {
                 R.id.fragment_chat -> {
                     supportFragmentManager.commit {
                         setReorderingAllowed(true)
-                        replace(R.id.fragment, chatFragment::class.java, null)
+                        replace(R.id.fragment, ChatlistFragment::class.java, null)
                         addToBackStack(null)
                     }
                     true
