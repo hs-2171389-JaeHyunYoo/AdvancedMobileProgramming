@@ -22,7 +22,7 @@ class Chatroomactivity : AppCompatActivity() {
         Firebase.auth
     }
 
-    private val chatList = mutableListOf<ChatItem>()
+    private val chatList = mutableListOf<Chatitem>()
     private val adapter = Chatitemadapter()
     private var chatDB: DatabaseReference? = null
 
@@ -36,7 +36,7 @@ class Chatroomactivity : AppCompatActivity() {
 
         chatDB?.addChildEventListener(object : ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
-                val chatItem = snapshot.getValue(ChatItem::class.java)
+                val chatItem = snapshot.getValue(Chatitem::class.java)
                 chatItem ?: return
 
                 chatList.add(chatItem)
@@ -59,8 +59,8 @@ class Chatroomactivity : AppCompatActivity() {
         findViewById<RecyclerView>(R.id.chatRecyclerView).layoutManager = LinearLayoutManager(this)
 
         findViewById<Button>(R.id.sendButton).setOnClickListener {
-            val chatItem = ChatItem(
-                senderId = auth.currentUser?.uid,
+            val chatItem = Chatitem(
+                senderId = auth.currentUser!!.uid,
                 message = findViewById<EditText>(R.id.messageEditText).text.toString()
             )
 

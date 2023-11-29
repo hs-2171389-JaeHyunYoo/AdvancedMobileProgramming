@@ -10,22 +10,22 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
 
-class ChatListAdapter(val onItemClicked: (Chatlistitem) -> Unit) : ListAdapter<Chatlistitem, ChatListAdapter.ViewHolder>(diffUtil) {
+class Chatlistadapter(val onItemClicked: (Chatlistitem) -> Unit) : ListAdapter<Chatlistitem, Chatlistadapter.ViewHolder>(diffUtil) {
 
-    inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(Chatlistitem: Chatlistitem) {
-            view.setOnClickListener {
-                onItemClicked(Chatlistitem)
+        fun bind(chatListItem: Chatlistitem) {
+            itemView.setOnClickListener {
+                onItemClicked(chatListItem)
             }
 
-            view.findViewById<TextView>(R.id.chatRoomTitleTextView).text = Chatlistitem.itemTitle
+            itemView.findViewById<TextView>(R.id.chatRoomTitleTextView).text = chatListItem.itemTitle
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_list, parent, false)
-        return ViewHolder(view)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_chat_list, parent, false)
+        return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -38,7 +38,6 @@ class ChatListAdapter(val onItemClicked: (Chatlistitem) -> Unit) : ListAdapter<C
                 return oldItem.key == newItem.key
             }
 
-            @SuppressLint("DiffUtilEquals")
             override fun areContentsTheSame(oldItem: Chatlistitem, newItem: Chatlistitem): Boolean {
                 return oldItem == newItem
             }

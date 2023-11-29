@@ -18,7 +18,7 @@ import com.google.firebase.ktx.Firebase
 
 class ChatlistFragment : Fragment(R.layout.fragment_chatlist) {
 
-    private lateinit var chatListAdapter: ChatListAdapter
+    private lateinit var chatListAdapter: Chatlistadapter
     private val chatRoomList = mutableListOf<Chatlistitem>()
 
     private val auth: FirebaseAuth by lazy {
@@ -28,7 +28,7 @@ class ChatlistFragment : Fragment(R.layout.fragment_chatlist) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        chatListAdapter = ChatListAdapter(onItemClicked = { chatRoom ->
+        chatListAdapter = Chatlistadapter(onItemClicked = { chatRoom ->
             // 채팅방으로 이동 하는 코드
             context?.let {
                 val intent = Intent(it, Chatroomactivity::class.java)
@@ -52,15 +52,10 @@ class ChatlistFragment : Fragment(R.layout.fragment_chatlist) {
         chatDB.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 snapshot.children.forEach {
-                    val buyerId = it.child("buyerId").getValue(String::class.java)
-                    val sellerId = it.child("sellerId").getValue(String::class.java)
-                    val itemTitle = it.child("itemTitle").getValue(String::class.java)
-                    val key = it.child("key").getValue(Long::class.java)
+                    val model = it.getValue(Chatlistitem::class.java)
+                    model ?: return
 
-                    if (buyerId != null && sellerId != null && itemTitle != null && key != null) {
-                        val model = Chatlistitem(buyerId, sellerId, itemTitle, key)
-                        chatRoomList.add(model)
-                    }
+                    chatRoomList.add(model)
                 }
 
                 chatListAdapter.submitList(chatRoomList)
