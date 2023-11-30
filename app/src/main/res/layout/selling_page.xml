@@ -62,10 +62,12 @@
         android:id="@+id/sellingPageMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="68dp"
         android:text="messaging to seller"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="228dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.163"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/sellingItemName"
