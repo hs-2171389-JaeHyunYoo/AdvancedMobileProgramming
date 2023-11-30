@@ -25,6 +25,51 @@ class signActivity : AppCompatActivity() {
         Firebase.auth
     }
 
+//    private fun initializeChatRoom() {
+//        // itemDB의 경로를 지정
+//        val itemDBPath = "your_item_db_path" // 실제 데이터베이스 경로로 수정해야 합니다.
+//
+//        // ValueEventListener를 통해 데이터 변경 감지
+//        itemDB.child(itemDBPath).addListenerForSingleValueEvent(object : ValueEventListener {
+//            override fun onDataChange(dataSnapshot: DataSnapshot) {
+//                // 데이터가 변경될 때 호출되는 메서드
+//                // dataSnapshot을 통해 데이터에 접근할 수 있습니다.
+//                val item = dataSnapshot.getValue(item::class.java)
+//
+//                // item이 null이 아닌지 확인 후, 나머지 코드 수행
+//                item?.let {
+//                    val chatRoom = Chatlistitem(
+//                        buyerId = auth.currentUser?.uid.orEmpty(),
+//                        sellerId = it.seller,
+//                        itemTitle = it.title,
+//                        key = System.currentTimeMillis()
+//                    )
+//
+//
+//
+//                    userDB.child(auth.currentUser?.uid.orEmpty())
+//                        .child(CHILD_CHAT)
+//                        .push()
+//                        .setValue(chatRoom)
+//
+//                    userDB.child(it.seller)
+//                        .child(CHILD_CHAT)
+//                        .push()
+//                        .setValue(chatRoom)
+//                } ?: run {
+//                    // item이 null일 경우에 대한 처리
+//                    Log.e("signActivity", "Item is null.")
+//                }
+//            }
+//
+//            override fun onCancelled(error: DatabaseError) {
+//                // 데이터 읽기를 실패하거나 취소될 때 호출되는 메서드
+//                Log.e("signActivity", "Failed to read item from database.", error.toException())
+//            }
+//        })
+//    }
+//
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.signup)
