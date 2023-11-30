@@ -1,16 +1,11 @@
 package com.example.project
 
 import android.os.Bundle
-import android.transition.Fade
-import android.transition.Scene
-import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -29,7 +24,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.tv_seller.text = itemList[position].seller
         holder.tv_title.text = itemList[position].title
-        holder.tv_explanation.text = itemList[position].explanation
+        holder.tv_explaination.text = itemList[position].explanation
         holder.tv_sellingItem.text = itemList[position].sellingItem
         holder.tv_price.text = itemList[position].price.toString()
         holder.tv_status.text = itemList[position].status.toString()
@@ -38,7 +33,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         val tv_seller: TextView = itemView.findViewById(R.id.tv_seller)
         val tv_title: TextView = itemView.findViewById(R.id.tv_title)
-        val tv_explanation: TextView = itemView.findViewById(R.id.tv_explanation)
+        val tv_explaination: TextView = itemView.findViewById(R.id.tv_explaination)
         val tv_sellingItem: TextView = itemView.findViewById(R.id.tv_sellingItem)
         val tv_price: TextView = itemView.findViewById(R.id.tv_price)
         val tv_status: TextView = itemView.findViewById(R.id.tv_status)
@@ -56,8 +51,9 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                     editPage.currentItemID = currentUserId//item의 id가 들어와야함 currentUSerId는 잘못됐음
 
                     val bundle = Bundle()
+                    bundle.putString("seller", tv_seller.text.toString())
                     bundle.putString("title", tv_title.text.toString())
-                    bundle.putString("explanation", tv_explanation.text.toString())
+                    bundle.putString("explaination", tv_explaination.text.toString())
                     bundle.putString("sellingItem", tv_sellingItem.text.toString())
                     bundle.putInt("price", tv_price.text.toString().toInt())
                     bundle.putBoolean("status", tv_status.text.toString().toBoolean())
@@ -72,8 +68,9 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                     val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
 
                     val bundle = Bundle()
+                    bundle.putString("seller", tv_seller.text.toString())
                     bundle.putString("title", tv_title.text.toString())
-                    bundle.putString("explanation", tv_explanation.text.toString())
+                    bundle.putString("explanation", tv_explaination.text.toString())
                     bundle.putString("sellingItem", tv_sellingItem.text.toString())
                     bundle.putInt("price", tv_price.text.toString().toInt())
                     bundle.putBoolean("status", tv_status.text.toString().toBoolean())

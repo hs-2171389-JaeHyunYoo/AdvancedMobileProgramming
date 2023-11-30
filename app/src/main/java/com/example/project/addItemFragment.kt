@@ -33,7 +33,7 @@ class addItemFragment : Fragment() {
         val itemAddBtn = view.findViewById<Button>(R.id.addItemButton)
         itemAddBtn.setOnClickListener {
             val title = view.findViewById<TextView>(R.id.addItemTitle).text.toString()
-            val explanation = view.findViewById<TextView>(R.id.addItemExplaination).text.toString()
+            val explaination = view.findViewById<TextView>(R.id.addItemExplaination).text.toString()
             val sellingItem = view.findViewById<TextView>(R.id.sellingItem).text.toString()
             val price = view.findViewById<TextView>(R.id.itemPrice).text.toString().toInt()
             val itemStatus = view.findViewById<Switch>(R.id.sellOrNot).isChecked
@@ -41,12 +41,12 @@ class addItemFragment : Fragment() {
             val itemMap = hashMapOf(
                 "seller" to logInWith,
                 "title" to title,
-                "explanation" to explanation,
+                "explaination" to explaination,
                 "sellingItem" to sellingItem,
                 "price" to price,
                 "status" to itemStatus
             )
-            println("addItemFragment : ${logInWith}-${title}-${sellingItem}-${price}-${itemStatus}")
+            println("addItemFragment : ${logInWith}-${title}-${sellingItem}-${price}-${itemStatus}-${explaination}")
 
             // 파이어베이스에 추가
             itemCollectionRef.add(itemMap)
