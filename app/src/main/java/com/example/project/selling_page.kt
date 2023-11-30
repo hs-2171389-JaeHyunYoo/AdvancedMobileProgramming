@@ -32,14 +32,12 @@ class selling_page : Fragment() {
         val view = inflater.inflate(R.layout.selling_page, container, false)
 
         val seller = arguments?.getString("seller", "no-seller")
-        println("selling_page : ${seller}")
+        //println("selling_page : ${seller}")
         val title = arguments?.getString("title", "")
         val explanation = arguments?.getString("explanation", "")
         val sellingItem = arguments?.getString("sellingItem", "")
         val price = arguments?.getInt("price", 0)
         val status = arguments?.getBoolean("status", false)
-
-
 
 
         view.findViewById<TextView>(R.id.sellingSeller).text = "판매자 : " + seller
@@ -56,7 +54,7 @@ class selling_page : Fragment() {
             view.findViewById<TextView>(R.id.sellingPageStatus).text = "판매 상태 : 판매 완료"
         }
 
-        println("${seller}-${title}-${explanation}-${sellingItem}-${price}-${status}#######################")
+        println("${title}-${explanation}-${sellingItem}-${price}-${status}#######################")
 
         val button = view.findViewById<Button>(R.id.sellingPageMessage)
 
@@ -71,12 +69,20 @@ class selling_page : Fragment() {
                 key = System.currentTimeMillis()
             )
 
+
             userDB.child(auth.currentUser!!.uid)
                 .child(CHILD_CHAT)
                 .push()
                 .setValue(chatRoom)
 
-            userDB.child(seller!!)
+
+            val sanitizedSeller = seller!!.replace(".", "_")
+                .replace("#", "_")
+                .replace("$", "_")
+                .replace("[", "_")
+                .replace("]", "_")
+                .replace("@","_")
+            userDB.child(sanitizedSeller)
                 .child(CHILD_CHAT)
                 .push()
                 .setValue(chatRoom)

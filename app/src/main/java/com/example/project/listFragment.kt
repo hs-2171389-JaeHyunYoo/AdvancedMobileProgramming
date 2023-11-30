@@ -50,7 +50,7 @@ class listFragment : Fragment() {
             for (document in result) {
                 val seller = document.getString("seller") ?: "no seller"
                 val title = document.getString("title") ?: ""
-                val explanation = document.getString("explaination") ?: ""
+                val explanation = document.getString("explanation") ?: ""
                 val sellingItem = document.getString("sellingItem") ?: ""
                 val price = document.getLong("price")?.toInt() ?: 0
                 val status = document.getBoolean("status") ?: false
@@ -73,7 +73,7 @@ class listFragment : Fragment() {
                     for (document in notForSale) {
                         val seller = document.getString("seller") ?: "no seller"
                         val title = document.getString("title") ?: ""
-                        val explanation = document.getString("explaination") ?: ""
+                        val explanation = document.getString("explanation") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""
                         val price = document.getLong("price")?.toInt() ?: 0
                         val status = document.getBoolean("status") ?: false
@@ -101,7 +101,7 @@ class listFragment : Fragment() {
                     for (document in result) {
                         val seller = document.getString("seller")?:""
                         val title = document.getString("title") ?: ""
-                        val explanation = document.getString("explaination") ?: ""
+                        val explanation = document.getString("explanation") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""
                         val price = document.getLong("price")?.toInt() ?: 0
                         val status = document.getBoolean("status") ?: false
