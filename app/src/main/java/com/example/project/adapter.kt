@@ -56,6 +56,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                     editPage.currentItemID = currentUserId//item의 id가 들어와야함 currentUSerId는 잘못됐음
 
                     val bundle = Bundle()
+                    bundle.putString("seller", tv_seller.text.toString())
                     bundle.putString("title", tv_title.text.toString())
                     bundle.putString("explanation", tv_explanation.text.toString())
                     bundle.putString("sellingItem", tv_sellingItem.text.toString())
@@ -72,6 +73,7 @@ class adapter(val itemList: ArrayList<item>): RecyclerView.Adapter<adapter.ViewH
                     val transaction = (context as AppCompatActivity).supportFragmentManager.beginTransaction()
 
                     val bundle = Bundle()
+                    bundle.putString("seller", tv_seller.text.toString())
                     bundle.putString("title", tv_title.text.toString())
                     bundle.putString("explanation", tv_explanation.text.toString())
                     bundle.putString("sellingItem", tv_sellingItem.text.toString())

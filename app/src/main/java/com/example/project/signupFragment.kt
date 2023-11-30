@@ -20,9 +20,7 @@ import com.google.firebase.ktx.Firebase
 class signupFragment : Fragment() {
 
     private val itemList = arrayListOf<item>()
-    private var adapter: adapter = adapter(itemList)
     private val db: FirebaseFirestore = Firebase.firestore
-    private val itemCollectionRef = db.collection("items")
 
 
     override fun onCreateView(
@@ -31,7 +29,6 @@ class signupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.signup, container, false)
-
 
 
         val signin = view.findViewById<Button>(R.id.signin)
