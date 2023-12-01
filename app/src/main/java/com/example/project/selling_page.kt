@@ -13,6 +13,7 @@ import com.example.project.DBKey.Companion.CHILD_CHAT
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
@@ -29,7 +30,11 @@ class selling_page : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+
         val view = inflater.inflate(R.layout.selling_page, container, false)
+
+        val buyer = Firebase.auth.currentUser?.email.toString()
 
         val seller = arguments?.getString("seller", "no-seller")
         //println("selling_page : ${seller}")
@@ -56,10 +61,28 @@ class selling_page : Fragment() {
 
         println("${title}-${explanation}-${sellingItem}-${price}-${status}#######################")
 
+
+        //메시지 보내기 버튼 클릭
         val button = view.findViewById<Button>(R.id.sellingPageMessage)
 
         button.setOnClickListener{
-            userDB = Firebase.database.reference.child(DB_USERS)
+            println("판매자 : ${seller} 구매자 : ${buyer}")
+
+            val bundle = Bundle()
+            bundle.putString("yjh_seller", seller)
+            bundle.putString("yjh_title", title)
+            //bundle.putString("yjh_buyer", buyer)
+
+
+            //채팅 창으로 이동
+            val moveToSend = yjh_chat_fragment()
+            moveToSend.arguments = bundle
+
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.fragment, moveToSend)
+            transaction.commit()
+
+            /*userDB = Firebase.database.reference.child(DB_USERS)
 
 
             val chatRoom = Chatlistitem(
@@ -87,7 +110,7 @@ class selling_page : Fragment() {
                 .push()
                 .setValue(chatRoom)
 
-            Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(view, "채팅방이 생성되었습니다. 채팅탭에서 확인해주세요.", Snackbar.LENGTH_LONG).show()*/
 
         }
 
