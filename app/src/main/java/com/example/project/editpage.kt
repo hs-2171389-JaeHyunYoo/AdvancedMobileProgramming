@@ -36,7 +36,7 @@ class edit : Fragment() {
 
 
         val title = arguments?.getString("title", "default-title")
-        val explaination = arguments?.getString("explanation", "default-explaination")
+        val explaination = arguments?.getString("explaination", "default-explaination")
         val sellingItem = arguments?.getString("sellingItem", "default-price")
         val price = arguments?.getInt("price", 0)
         val status = arguments?.getBoolean("status", false)

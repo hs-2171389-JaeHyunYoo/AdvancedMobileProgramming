@@ -40,7 +40,7 @@ class selling_page : Fragment() {
         //println("selling_page : ${seller}")
 
         val title = arguments?.getString("title", "")
-        val explanation = arguments?.getString("explanation", "")
+        val explaination = arguments?.getString("explaination", "")
         val sellingItem = arguments?.getString("sellingItem", "")
         val price = arguments?.getInt("price", 0)
         val status = arguments?.getBoolean("status", false)
@@ -48,7 +48,7 @@ class selling_page : Fragment() {
 
         view.findViewById<TextView>(R.id.sellingSeller).text = seller
         view.findViewById<TextView>(R.id.sellingTitle).text = title
-        view.findViewById<TextView>(R.id.sellingExplaination).text = explanation
+        view.findViewById<TextView>(R.id.sellingExplaination).text = explaination
         view.findViewById<TextView>(R.id.sellingItemName).text = sellingItem
         view.findViewById<TextView>(R.id.sellingPrice).text = price.toString()+"원"
 
@@ -60,7 +60,7 @@ class selling_page : Fragment() {
             view.findViewById<TextView>(R.id.sellingPageStatus).text = "판매 완료"
         }
 
-        println("${title}-${explanation}-${sellingItem}-${price}-${status}#######################")
+        println("${title}-${explaination}-${sellingItem}-${price}-${status}#######################")
 
 
         //메시지 보내기 버튼 클릭

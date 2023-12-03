@@ -50,7 +50,7 @@ class listFragment : Fragment() {
             for (document in result) {
                 val seller = document.getString("seller") ?: "no seller"
                 val title = document.getString("title") ?: ""
-                val explanation = document.getString("explanation") ?: ""
+                val explaination = document.getString("explaination") ?: ""
 
                 val sellingItem = document.getString("sellingItem") ?: ""
                 val price = document.getLong("price")?.toInt() ?: 0
@@ -74,7 +74,7 @@ class listFragment : Fragment() {
                     for (document in notForSale) {
                         val seller = document.getString("seller") ?: "filtering : no seller"
                         val title = document.getString("title") ?: ""
-                        val explanation = document.getString("explanation") ?: ""
+                        val explaination = document.getString("explaination") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""
                         val price = document.getLong("price")?.toInt() ?: 0
                         val status = document.getBoolean("status") ?: false
@@ -83,7 +83,7 @@ class listFragment : Fragment() {
                             item(
                                 seller,
                                 title,
-                                explanation,
+                                explaination,
                                 sellingItem,
                                 price,
                                 status
@@ -102,12 +102,12 @@ class listFragment : Fragment() {
                     for (document in result) {
                         val seller = document.getString("seller")?:""
                         val title = document.getString("title") ?: ""
-                        val explanation = document.getString("explanation") ?: ""
+                        val explaination = document.getString("explaination") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""
                         val price = document.getLong("price")?.toInt() ?: 0
                         val status = document.getBoolean("status") ?: false
 
-                        itemList.add(item(seller,title, explanation, sellingItem, price, status))
+                        itemList.add(item(seller,title, explaination, sellingItem, price, status))
 
                         //println("${title}!${explanation}!${sellingItem}!${price}!${status}")
                     }
