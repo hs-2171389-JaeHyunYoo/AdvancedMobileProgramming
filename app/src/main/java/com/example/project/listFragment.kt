@@ -51,11 +51,12 @@ class listFragment : Fragment() {
                 val seller = document.getString("seller") ?: "no seller"
                 val title = document.getString("title") ?: ""
                 val explanation = document.getString("explanation") ?: ""
+
                 val sellingItem = document.getString("sellingItem") ?: ""
                 val price = document.getLong("price")?.toInt() ?: 0
                 val status = document.getBoolean("status") ?: false
 
-                itemList.add(item(seller, title, explanation, sellingItem, price, status))
+                itemList.add(item(seller, title, explaination, sellingItem, price, status))
             }
             // 데이터 변경을 알려주기 위해 Adapter에 notifyDataSetChanged 호출
             adapter?.notifyDataSetChanged()
@@ -71,7 +72,7 @@ class listFragment : Fragment() {
                 task.addOnSuccessListener { querySnapshot ->
                     val notForSale: MutableList<DocumentSnapshot> = querySnapshot.documents
                     for (document in notForSale) {
-                        val seller = document.getString("seller") ?: "no seller"
+                        val seller = document.getString("seller") ?: "filtering : no seller"
                         val title = document.getString("title") ?: ""
                         val explanation = document.getString("explanation") ?: ""
                         val sellingItem = document.getString("sellingItem") ?: ""

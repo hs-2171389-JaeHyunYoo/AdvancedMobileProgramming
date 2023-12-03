@@ -41,7 +41,7 @@ class addItemFragment : Fragment() {
             val itemMap = hashMapOf(
                 "seller" to logInWith,
                 "title" to title,
-                "explanation" to explanation,
+                "explaination" to explanation,
                 "sellingItem" to sellingItem,
                 "price" to price,
                 "status" to itemStatus

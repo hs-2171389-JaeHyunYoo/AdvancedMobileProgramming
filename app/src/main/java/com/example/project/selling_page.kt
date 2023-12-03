@@ -38,6 +38,7 @@ class selling_page : Fragment() {
 
         val seller = arguments?.getString("seller", "no-seller")
         //println("selling_page : ${seller}")
+
         val title = arguments?.getString("title", "")
         val explanation = arguments?.getString("explanation", "")
         val sellingItem = arguments?.getString("sellingItem", "")
