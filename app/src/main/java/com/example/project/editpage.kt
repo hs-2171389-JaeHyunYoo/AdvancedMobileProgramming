@@ -31,7 +31,9 @@ class edit : Fragment() {
         val editStatus = view.findViewById<EditText>(R.id.editsellingPageStatus)
         val update = view.findViewById<Button>(R.id.update)
         //YJH
-        val switch = view.findViewById<Switch>(R.id.statusSwitch)
+        
+        val switch = view.findViewById<Switch>(R.id.changeStatus)
+
 
         val title = arguments?.getString("title", "default-title")
         val explaination = arguments?.getString("explanation", "default-explaination")

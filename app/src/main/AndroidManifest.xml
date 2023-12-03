@@ -22,6 +22,9 @@
             android:name=".signActivity"
             android:exported="false" />
         <activity
+            android:name=".Chatroomactivity"
+            android:exported="false"/>
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

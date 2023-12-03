@@ -9,6 +9,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.project.DBKey.Companion.CHILD_CHAT
+import com.example.project.DBKey.Companion.DB_USERS
+import com.example.project.DBKey.Companion.DB_ITEMS
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -28,6 +31,8 @@ class signupFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.signup, container, false)
+
+
 
         val signin = view.findViewById<Button>(R.id.signin)
         val signup = view.findViewById<Button>(R.id.signup)

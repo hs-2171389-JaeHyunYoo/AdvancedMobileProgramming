@@ -56,6 +56,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
 
     implementation ("androidx.fragment:fragment-ktx:1.5.7")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.0")
 
 
 
