@@ -81,6 +81,7 @@ class selling_page : Fragment() {
 
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment, moveToSend)
+            transaction.addToBackStack(null) // 이전 상태를 백스택에 추가
             transaction.commit()
 
             /*userDB = Firebase.database.reference.child(DB_USERS)

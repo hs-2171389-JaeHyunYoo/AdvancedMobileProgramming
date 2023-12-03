@@ -58,6 +58,8 @@ class yjh_chat_fragment : Fragment() {
 
 
 
+
+
         return view
     }
 }
